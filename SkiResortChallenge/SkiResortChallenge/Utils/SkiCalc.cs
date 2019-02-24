@@ -51,5 +51,101 @@ namespace SkiChallenge.Utils
             }
         }
 
+
+
+        private int[] DfsSingleBox(int i, int j)
+        {
+            int[] pathAndDrop = { 0, i, j }; //First path value, x and y values
+            int[] curPathAndDrop = new int[2];
+
+
+            // search up
+            if (j > 0 && resortMap[i, j] > resortMap[i, j - 1])
+            {
+                curPathAndDrop = DfsSingleBox(i, j - 1);
+
+                if (curPathAndDrop[0] > pathAndDrop[0]) // if the current path value is larger
+                                                        // update the path length
+                    pathAndDrop = curPathAndDrop;
+            }
+
+
+            // search down 
+            if (j < (column - 1) && resortMap[i, j] > resortMap[i, j + 1])
+            {
+                curPathAndDrop = DfsSingleBox(i, j + 1);
+                if (curPathAndDrop[0] > pathAndDrop[0])
+                    pathAndDrop = curPathAndDrop;
+            }
+
+
+            // search left 
+            if (i > 0 && resortMap[i, j] > resortMap[i - 1, j])
+            {
+                curPathAndDrop = DfsSingleBox(i - 1, j);
+                if (curPathAndDrop[0] > pathAndDrop[0])
+                    pathAndDrop = curPathAndDrop;
+            }
+
+
+            // search right 
+            if (i < (row - 1) && resortMap[i, j] > resortMap[i + 1, j])
+            {
+                curPathAndDrop = DfsSingleBox(i + 1, j);
+                if (curPathAndDrop[0] > pathAndDrop[0])
+                    pathAndDrop = curPathAndDrop;
+            }
+
+            pathAndDrop[0]++; // Path length ++
+
+            return pathAndDrop;
+
+
+        }
+
+
+
+        private static List<int> DfsForMaxPath(int x, int y)
+        {
+            List<int> list = new List<int>();
+            List<int> curPathList = new List<int>();
+
+            // search from the up direction
+            if (y > 0 && resortMap[x, y] > resortMap[x, y - 1])
+            {
+                curPathList = DfsForMaxPath(x, y - 1);
+                if (curPathList.Count > list.Count)
+                    list = curPathList;
+            }
+
+            // search from the down direction
+            if (y < (column - 1) && resortMap[x, y] > resortMap[x, y + 1])
+            {
+                curPathList = DfsForMaxPath(x, y + 1);
+                if (curPathList.Count > list.Count)
+                    list = curPathList;
+            }
+
+            // search from the left direction
+            if (x > 0 && resortMap[x, y] > resortMap[x - 1, y])
+            {
+                curPathList = DfsForMaxPath(x - 1, y);
+                if (curPathList.Count > list.Count)
+                    list = curPathList;
+            }
+
+            // search from the right direction
+            if (x < (row - 1) && resortMap[x, y] > resortMap[x + 1, y])
+            {
+                curPathList = DfsForMaxPath(x + 1, y);
+                if (curPathList.Count > list.Count)
+                    list = curPathList;
+            }
+            list.Add(y); 
+            list.Add(x); 
+
+            return list;
+        }
+
     }
 }
