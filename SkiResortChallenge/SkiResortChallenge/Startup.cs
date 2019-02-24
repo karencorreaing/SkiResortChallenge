@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NSwag.AspNetCore;
+using NJsonSchema;
 
 namespace SkiResortChallenge
 {
@@ -26,6 +28,33 @@ namespace SkiResortChallenge
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            //Register the Swagger services
+           
+                                       
+            services.AddSwaggerDocument(config =>
+            {
+                config.PostProcess = document =>
+                {
+                    document.Info.Version = "v1";
+                    document.Info.Title = "Ski Resort API - Challenge";
+                    document.Info.Description = "ASP.NET Core web API";
+                    document.Info.TermsOfService = "None";
+                    document.Info.Contact = new NSwag.SwaggerContact
+                    {
+                        Name = "Karen Michelle Correa",
+                        Email = string.Empty,
+                        Url = "https://github.com/karencorreaing/SkiResortChallenge"
+                    };
+                    document.Info.License = new NSwag.SwaggerLicense
+                    {
+                        Name = "Use under LICX",
+                        Url = "https://example.com/license"
+                    };
+                };
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +70,15 @@ namespace SkiResortChallenge
             }
             app.UseStaticFiles(); //Let see the html file. 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+            app.UseSwaggerUi3();
+
             app.UseMvc();
+
+
+
+
         }
     }
 }

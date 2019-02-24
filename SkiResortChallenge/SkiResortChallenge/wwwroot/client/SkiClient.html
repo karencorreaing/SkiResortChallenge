@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bootstrap Example</title>
+    <title>Kitzbühel ski resort</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -15,7 +15,7 @@
         <p>Results</p>
         <h3 id="maximalPath"></h3>
         <h3 id="maximalDrop"></h3>
-        <h4>Result list - X ,Y coordinates and altitude</h4>
+        <h4>Let's see the results!</h4>
         <div id="tableRoutes">
         </div>
     </div>
@@ -25,11 +25,11 @@
                 $("#maximalPath").html("Maximal Path : " + result.maximalPath);
                 $("#maximalDrop").html("Maximal Drop : " + result.maximalDrop);
 
-                var tableTemplate = '<table class="table table-bordered table-stripped"><thead><tr><th>X</th><th>Y</th><th>Altitude</th></tr></thead><tbody>[[BODY]]</tbody></table>';
+                var tableTemplate = '<table class="table table-bordered table-stripped table-hover"><thead><tr class="info"><th>X</th><th>Y</th><th>Altitude</th></tr></thead><tbody>[[BODY]]</tbody></table>';
                 var bodytable = "";
                 for (var route in result.routes) {
                     var theRoute = result.routes[route];
-                    bodytable += '<tr><td>' + theRoute.x + '</td><td>' + theRoute.y + '</td><td>' + theRoute.altitude + '</td></tr>'
+                    bodytable += '<tr class=info"><td>' + theRoute.x + '</td><td>' + theRoute.y + '</td><td>' + theRoute.altitude + '</td></tr>'
                 }
                 tableTemplate = tableTemplate.replace("[[BODY]]", bodytable);
                 $("#tableRoutes").html(tableTemplate);
