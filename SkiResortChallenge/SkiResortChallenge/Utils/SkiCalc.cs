@@ -82,14 +82,18 @@ namespace SkiChallenge.Utils
             {
                 XY[m % 2] = tmp;
                 m++;
+
                 Console.WriteLine(tmp + "\t");
                 if (m % 2 == 0)
+                {
                     route = new Route();
-                route.x = XY[0];
-                route.y = XY[1];
-                route.altitude = resortMap[XY[0], XY[1]];
-                response.Routes.Add(route);
-                Console.WriteLine("altitude: " + route.altitude);
+
+                    route.x = XY[0];
+                    route.y = XY[1];
+                    route.altitude = resortMap[XY[0], XY[1]];
+                    response.Routes.Add(route);
+                    Console.WriteLine("altitude: " + route.altitude);
+                }
             }
 
             return response;
