@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SkiChallenge.Utils;
+using SkiResortChallenge.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,11 +13,13 @@ namespace SkiResortChallenge.Controllers
     [Route("api/[controller]")]
     public class SkiController : Controller
     {
-        // GET: api/values
+        // GET: api/ski
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            SkiCalc calc = new SkiCalc();
+            SkiResponse response = calc.calc();
+            return Ok(response);
         }
 
        

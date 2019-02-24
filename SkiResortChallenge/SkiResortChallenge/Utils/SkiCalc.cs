@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using SkiResortChallenge.Utils;
 
 namespace SkiChallenge.Utils
 {
@@ -17,6 +18,83 @@ namespace SkiChallenge.Utils
         {
         }
 
+
+        public SkiResponse calc()
+        {
+            SkiResponse response = new SkiResponse();
+            // load data from the mapData.txt and store in a matrix: map
+            String fileName = "/Users/macbook/Downloads/skirsesort/map.txt";
+            LoadDataFromFile(fileName);
+
+            // update the path matrix and drop matrix using dfs search
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    int[] tmp = DfsSingleBox(i, j);
+                    path[i, j] = tmp[0];
+                    drop[i, j] = resortMap[i, j] - resortMap[tmp[1], tmp[2]];
+                }
+            }
+
+            int[] maxXY = new int[2]; // record coordinate values of point with max path and drop
+            int maxPath = -1; // record the maxPath
+            int maxDrop = -1; // record the maxDrop
+
+            // find the maxPath and maxDrop in the path matrix and drop matrix
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    if (path[i, j] > maxPath)
+                    { // if path[i][j] > maxPath, update maxPath, maxDrop
+                        maxPath = path[i, j];
+                        maxDrop = drop[i, j];
+                        maxXY[0] = i; // update the coordinate values of max point
+                        maxXY[1] = j;
+                    }
+                    if (path[i, j] == maxPath)
+                    { // if maxPath equals, compare the maxDrop
+                        if (drop[i, j] > maxDrop)
+                        { // if drop[i][j] > maxDrop, update maxDrop
+                            maxDrop = drop[i, j];
+                            maxXY[0] = i; // update the coordinate values of max point
+                            maxXY[1] = j;
+                        }
+                    }
+                }
+            }
+            // print max path and max drop
+            Console.WriteLine("Maximal Path is: " + maxPath + "\nMaximal Drop is: " + maxDrop);
+            response.maximalPath = maxPath;
+            response.maximalDrop = maxDrop;
+            // find the path from the maximal point to the minimal point
+            List<int> list = DfsForMaxPath(maxXY[0], maxXY[1]); // store x, y values in a list
+            list.Reverse(); // reverse the list
+                            // print the path of the skiing down process
+            Console.WriteLine("The corresponding routes are: ");
+            Console.WriteLine("x\t y \t    Height");
+            int m = 0;
+            int[] XY = new int[2];
+            Route route = new Route();
+            response.Routes = new List<Route>();
+            foreach (var tmp in list)
+            {
+                XY[m % 2] = tmp;
+                m++;
+                Console.WriteLine(tmp + "\t");
+                if (m % 2 == 0)
+                    route = new Route();
+                route.x = XY[0];
+                route.y = XY[1];
+                route.altitude = resortMap[XY[0], XY[1]];
+                response.Routes.Add(route);
+                Console.WriteLine("altitude: " + route.altitude);
+            }
+
+            return response;
+
+        }
     
 
         public void LoadDataFromFile(string FilePath)

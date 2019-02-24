@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>SKI RESORT CHALLENGE</h1>
+        <p>Results</p>
+        <h3 id="maximalPath"></h3>
+        <h3 id="maximalDrop"></h3>
+        <h4>Result list - X ,Y coordinates and altitude</h4>
+        <div id="tableRoutes">
+        </div>
+    </div>
+    <script>$.ajax({
+            url: "/api/ski", success: function(result) {
+                console.log(result);
+                $("#maximalPath").html("Maximal Path : " + result.maximalPath);
+                $("#maximalDrop").html("Maximal Drop : " + result.maximalDrop);
+
+                var tableTemplate = '<table class="table table-bordered table-stripped"><thead><tr><th>X</th><th>Y</th><th>Altitude</th></tr></thead><tbody>[[BODY]]</tbody></table>';
+                var bodytable = "";
+                for (var route in result.routes) {
+                    var theRoute = result.routes[route];
+                    bodytable += '<tr><td>' + theRoute.x + '</td><td>' + theRoute.y + '</td><td>' + theRoute.altitude + '</td></tr>'
+                }
+                tableTemplate = tableTemplate.replace("[[BODY]]", bodytable);
+                $("#tableRoutes").html(tableTemplate);
+            }
+});</script>
+</body>
+</html>

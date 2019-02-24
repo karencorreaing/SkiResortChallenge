@@ -39,7 +39,7 @@ namespace SkiResortChallenge
             {
                 app.UseHsts();
             }
-
+            app.UseStaticFiles(); //Let see the html file. 
             app.UseHttpsRedirection();
             app.UseMvc();
         }
